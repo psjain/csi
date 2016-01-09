@@ -106,7 +106,7 @@ Route::get('/profile', ['middleware'=>'auth', 'as' => 'profile', 'uses'=>'UserDa
 Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as' => 'confirmStudentBranch', 'uses'=>'UserDashboardController@confirmStudentBranch']);
 Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
 Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
-
+Route::get('/travelgrant', [ 'as' => 'createtravel', 'uses'=>'TravelGrantsController@index']);
 
 
 // Registration routes...
