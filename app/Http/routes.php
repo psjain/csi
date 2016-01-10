@@ -38,8 +38,14 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	});
 
 	Route::get('/admintravelgrant', [ 'as' => 'adminTravelGrantView', 'uses'=>'adminTravelGrantController@index' ]);
+
+	Route::get('/admintravelgrantapproved', [ 'as' => 'adminTravelGrantApproved', 'uses'=>'adminTravelGrantController@approve' ]);
 	
+	Route::get('/admintravelgrantrejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
 	
+	Route::get('/admintravelgrantviewform', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
+	
+
 	Route::group(['prefix' => 'memberships', 'middleware'=>'auth.admin'], function(){
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
 		// Route::get('{typeId}/verify/{id}', [ 'as' => 'backendInstitutionVerifyById', 'uses'=>'InstitutionController@verify' ]);
