@@ -37,21 +37,53 @@
                 {{-- starting list items --}}
                 <div class="panel-body">
                     <div class="listing-items">
-                      <div class="row">
-                        <div class="col-md-4">
-                          <h5>EVENT NAME</h5>
-                      </div>
-                       <div class="col-md-3">
-                           <h5>DATE OF REQUEST</h5>
-                      </div>
-                      <div class="col-md-3">
-                           <h5>AMOUNT REQUESTED</h5>
-                      </div>
-                      <div class="col-md-2">
-                           <h5>STATUS</h5>
-                      </div>
                       
-                    </div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>EVENT NAME</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>DATE OF REQUEST</h5>
+							</div>
+							<div class="col-md-3">
+								<h5>AMOUNT REQUESTED</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>STATUS</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>EDIT/DELETE</h5>
+							</div>
+						</div>
+					 
+							@foreach($travel as $travels)
+							
+								<div class="row">
+									<div class="col-md-3">
+										<h5>{{ $travels->eventname }}</h5>
+									</div>
+									<div class="col-md-2">
+										<h5>{{$travels->created_at}}</h5>
+									</div>
+									<div class="col-md-3">
+										<h5>{{$travels->grantrequested}}</h5>
+									</div>
+									<div class="col-md-2">
+										<h5>{{$travels->status}}</h5>
+									</div>
+									 
+									 @if($travels->status == "pending")
+									<div class="col-md-2">
+										<h5><a href="{{ route('editgrant', $travels->id) }}" >edit/</a><a href="{{ route('deletegrant', $travels->id) }}">delete</a></h5>
+									</div>
+									 @elseif($travels->status == "approved")
+									<div class="col-md-2">
+										
+									</div>
+									@endif
+								</div>
+							@endforeach
+						
                   </div>
                 </div>
                 {{-- ending list items --}}
