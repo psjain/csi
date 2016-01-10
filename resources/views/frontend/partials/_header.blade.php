@@ -80,10 +80,10 @@
                                     <a href={{ route('createtravel') }}>Create</a>
                                 </li>
                                 <li>
-                                    <a href={{ route('profile') }}>View All</a>
+                                    <a href={{ route('viewalltravel') }}>View All</a>
                                 </li>
                                 <li>
-                                    <a href={{ route('profile') }}>My Grants</a>
+                                    <a href={{ route('viewallgrant') }}>My Grants</a>
                                 </li>
                                 
                             </ul>
