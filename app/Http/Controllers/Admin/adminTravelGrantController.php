@@ -19,6 +19,26 @@ class adminTravelGrantController extends Controller
         return view('backend.travelgrants.adminTravelGrant');
     }
 
+    public function approve()
+    {
+         return view('backend.travelgrants.adminTravelGrantApproved');
+   
+
+    }
+    public function reject()
+    {
+         return view('backend.travelgrants.adminTravelGrantRejected');
+   
+
+    }
+      public function view()
+    {
+         return view('backend.travelgrants.adminTravelGrantViewForm');
+   
+
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
