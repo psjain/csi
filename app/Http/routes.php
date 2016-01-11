@@ -17,6 +17,9 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	Route::get('/sample', ['as' => 'sample', 'uses' => function () {
 		return View('backend.sample-list');
 
+
+
+
 	}]);
     Route::get('/', ['as' => 'admin', 'uses' => 'Auth\AdminAuthController@index']);
     
@@ -29,7 +32,19 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	Route::group(['prefix' => 'payments', 'middleware'=>'auth.admin'], function(){
 		Route::get('/{id}', ['as' => 'adminMemberPaymentDetails', 'uses' => 'PaymentController@index']);
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
+		
+
+
 	});
+
+	Route::get('/admintravelgrant', [ 'as' => 'adminTravelGrantView', 'uses'=>'adminTravelGrantController@index' ]);
+
+	Route::get('/admintravelgrantapproved', [ 'as' => 'adminTravelGrantApproved', 'uses'=>'adminTravelGrantController@approve' ]);
+	
+	Route::get('/admintravelgrantrejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
+	
+	Route::get('/admintravelgrantviewform', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
+	
 
 	Route::group(['prefix' => 'memberships', 'middleware'=>'auth.admin'], function(){
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
@@ -107,6 +122,9 @@ Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as'
 Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
 Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
 Route::get('/travelgrant', [ 'as' => 'createtravel', 'uses'=>'TravelGrantsController@index']);
+Route::get('/travelgrantviewall', [ 'as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
+Route::get('/travelgrantmygrant', [ 'as' => 'viewallgrant', 'uses'=>'TravelGrantsController@viewgrant']);
+
 
 
 // Registration routes...

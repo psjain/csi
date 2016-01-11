@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class TravelGrantsController extends Controller
+class adminTravelGrantController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,28 @@ class TravelGrantsController extends Controller
      */
     public function index()
     {
-        return view('frontend.dashboard.travelgrant_user');
+        return view('backend.travelgrants.adminTravelGrant');
     }
+
+    public function approve()
+    {
+         return view('backend.travelgrants.adminTravelGrantApproved');
+   
+
+    }
+    public function reject()
+    {
+         return view('backend.travelgrants.adminTravelGrantRejected');
+   
+
+    }
+      public function view()
+    {
+         return view('backend.travelgrants.adminTravelGrantViewForm');
+   
+
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -26,11 +46,7 @@ class TravelGrantsController extends Controller
      */
     public function create()
     {
-         //
-    }
-    public function viewgrant()
-    {
-         return view('frontend.dashboard.travelGrantMyGrant'); 
+        //
     }
 
     /**
@@ -41,7 +57,7 @@ class TravelGrantsController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**
@@ -52,13 +68,7 @@ class TravelGrantsController extends Controller
      */
     public function show($id)
     {
-       //
-    }
-
-    public function viewAll()
-    {
-
-         return view('frontend.dashboard.travelGrantListingAll');
+        //
     }
 
     /**

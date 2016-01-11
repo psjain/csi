@@ -30,6 +30,32 @@
             </ul>
             <!-- /.nav-second-level -->
         </li>
+
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Travel Grants <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href={{ route('adminTravelGrantView') }}>View All Requests</a>
+                </li>
+                 <li>
+                    <a href={{ route('adminTravelGrantApproved') }}>View Appproved Requests</a>
+                </li>
+                 <li>
+                    <a href={{ route('adminTravelGrantRejected') }}>View Rejected Requests</a>
+                </li>
+                <li>
+                     <a href={{ route('adminTravelGrantViewForm') }}>View Form</a>
+
+                </li>
+
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
+
+
+
+
        
         {{-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Works <span class="caret"></span></a>
