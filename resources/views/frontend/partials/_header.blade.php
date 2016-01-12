@@ -77,13 +77,13 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>Travel Grants <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href={{ route('profile') }}>Create</a>
+                                    <a href={{ route('createtravel') }}>Create</a>
                                 </li>
                                 <li>
-                                    <a href={{ route('profile') }}>View All</a>
+                                    <a href={{ route('viewalltravel') }}>View All</a>
                                 </li>
                                 <li>
-                                    <a href={{ route('profile') }}>My Grants</a>
+                                    <a href={{ route('viewallgrant') }}>My Grants</a>
                                 </li>
                                 
                             </ul>
