@@ -121,10 +121,13 @@ Route::get('/profile', ['middleware'=>'auth', 'as' => 'profile', 'uses'=>'UserDa
 Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as' => 'confirmStudentBranch', 'uses'=>'UserDashboardController@confirmStudentBranch']);
 Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
 Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
-Route::get('/travelgrant', [ 'as' => 'createtravel', 'uses'=>'TravelGrantsController@index']);
+
+//travelgrants
+Route::get('/travelgrant', [ 'as' => 'createtravel', 'uses'=>'TravelGrantsController@create']);
 Route::get('/travelgrantviewall', [ 'as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
 Route::get('/travelgrantmygrant', [ 'as' => 'viewallgrant', 'uses'=>'TravelGrantsController@viewgrant']);
-
+Route::get('/travelgrant/edit/{id}', [ 'as' => 'editgrant', 'uses'=>'TravelGrantsController@edit']);
+Route::get('/travelgrant/delete/{id}', [ 'as' => 'deletegrant', 'uses'=>'TravelGrantsController@destroy']);
 
 
 // Registration routes...

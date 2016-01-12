@@ -37,23 +37,51 @@
                 {{-- starting list items --}}
                 <div class="panel-body">
                     <div class="listing-items">
-                      <div class="row">
-                        <div class="col-md-4">
-                          <h5>EVENT NAME</h5>
-                      </div>
-                       <div class="col-md-2">
-                           <h5>EVENT VENUE</h5>
-                      </div>
-                      <div class="col-md-3">
-                           <h5>AMOUNT REQUESTED</h5>
-                      </div>
-                      <div class="col-md-3">
-                           <h5>AMOUNT GRANTED</h5>
-                      </div>
                       
-                    </div>
+						<div class="row">
+							<div class="col-md-3">
+								<h5>EVENT NAME</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>EVENT VENUE</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>DATE OF EVENT</h5>
+							</div>
+							<div class="col-md-3">
+								<h5>AMOUNT REQUESTED</h5>
+							</div>
+							<div class="col-md-2">
+								<h5>AMOUNT GRANTED</h5>
+							</div>
+						</div>
+				<?php 
+							foreach($travel as $travels)
+							{
+								if($travels->amountgranted!=0)
+								{
+									echo '<div class="row">
+										<div class="col-md-3">
+											<h5>'.$travels->eventname.'</h5>
+										</div>
+										<div class="col-md-2">
+											<h5>'.$travels->venue.'</h5>
+										</div>
+										<div class="col-md-3">
+											<h5>'.$travels->date.'</h5>
+										</div>
+										<div class="col-md-2">
+											<h5>'.$travels->grantrequested.'</h5>
+										</div>
+										<div class="col-md-2">
+											<h5>'.$travels->amountgranted.'</h5>
+										</div>
+									</div>';									
+								}
+							}		
+						?>	
                   </div>
-                </div>
+                </div
                 {{-- ending list items --}}
 
                   <!-- panel-footer -->
