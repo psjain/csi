@@ -17,7 +17,7 @@
    						</ul>
    				@endif
 
-   					{!! Form::open(['url' => 'travelgrant']) !!}
+   	  {!! Form::open(['url' => ['travelgrant'],'files'=> true]) !!}
 					  	
 						<div class="form-group">
 							<label for="exampleInputPassword1">Event Name</label>
@@ -63,7 +63,7 @@
                   </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Documents to be Attached</label>
-                     <input type="file" name="travel_event_member_documents" id="travel_event_member_documents">
+                     <input type="file" name="travel_event_member_document" id="travel_event_member_documents">
                      <p class="help-block">Please upload your documents.(file types allowed are doc/pdf</p>
                      
                   </div>

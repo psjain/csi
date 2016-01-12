@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Travelgrant;
-class TravelRole extends Model
+class Travelrole extends Model
 {
      protected $fillable = ['role']; 
 

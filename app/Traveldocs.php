@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TravelDocument extends Model
+class Traveldocs extends Model
 {
 	use SoftDeletes;
 
@@ -17,4 +17,5 @@ class TravelDocument extends Model
     public function getDocument()	{
     	return $this->hasOne('App\TravelGrant', 'id', 'grantid');
 
+	}
 }
