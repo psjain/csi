@@ -43,7 +43,7 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	
 	Route::get('/admintravelgrantrejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
 	
-	Route::get('/admintravelgrantviewform', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
+	Route::get('/admintravelgrantviewform/{id}', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
 	
 
 	Route::group(['prefix' => 'memberships', 'middleware'=>'auth.admin'], function(){

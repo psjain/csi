@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
+use DB;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +18,12 @@ class adminTravelGrantController extends Controller
      */
     public function index()
     {
-        return view('backend.travelgrants.adminTravelGrant');
+	//	$id = Auth::user()->user()->id; // user id of logged in user, this only works when a user is logged in.
+	//	$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->where('travelgrants.memid', '=', $id)->get();
+	
+		$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->join('individuals', 'individuals.member_id', '=', 'travelgrants.memid')->where('travelversions.status', '=', 'pending')->get();
+
+        return view('backend.travelgrants.adminTravelGrant',compact('travel'));
     }
 
     public function approve()
@@ -31,11 +38,12 @@ class adminTravelGrantController extends Controller
    
 
     }
-      public function view()
+      public function view($id)
     {
-         return view('backend.travelgrants.adminTravelGrantViewForm');
-   
-
+		
+	//	$user_id = Auth::user()->user()->id; // user id of logged in user
+		$travel = DB::table('travelgrants')->join('travelroles', 'travelroles.id', '=', 'travelgrants.roleid')->where('travelgrants.id','=', $id )->first();
+        return view('backend.travelgrants.adminTravelGrantViewForm',compact('travel'));
     }
 
 

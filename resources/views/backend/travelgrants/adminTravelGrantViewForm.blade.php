@@ -21,31 +21,31 @@
    						</ul>
    				@endif
 
-   					{!! Form::open(['url' => 'travelgrant']) !!}
+   					{!! Form::open(['url' => '#']) !!}
 					  	
 						<div class="form-group">
 							<label for="exampleInputPassword1">Event Name</label>
-							<label for="exampleInputPassword1">///////////</label>
+							<label for="exampleInputPassword1">{{ $travel->eventname }}</label>
         					
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Event Date</label>
-        					<label for="exampleInputPassword1">///////////</label>
+        					<label for="exampleInputPassword1">{{ $travel->date }}</label>
         					
 						</div>
                   		<div class="form-group">
                     		 <label for="exampleInputPassword1">Event Venue</label>
-                     		<label for="exampleInputPassword1">///////////</label>
+                     		<label for="exampleInputPassword1">{{ $travel->venue }}</label>
         					
                  		 </div>
                 	  <div class="form-group">
                     		 <label for="exampleInputPassword1">Member Role</label>
-                    		 <label for="exampleInputPassword1">///////////</label>
+                    		 <label for="exampleInputPassword1">{{ $travel->role }}</label>
         							
                  	 </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Request Justification</label>
-                       {!! Form::textarea('travel_event_request_justification', '', ['class'=>'form-control','rows'=>3,'cols'=>8]) !!} 
+					   {!! Form::textarea('travel_event_request_justification', $travel->justification, ['class'=>'form-control','rows'=>3,'cols'=>8]) !!} 
                      
                   </div>
 
@@ -57,12 +57,12 @@
                  </div> 
                   <div class="form-group">
                      <label for="exampleInputPassword1">Transportation Mode</label>
-                    <label for="exampleInputPassword1">///////////</label>
+                    <label for="exampleInputPassword1">{{ $travel->mode }}</label>
         					 
                   </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Amount Requested</label>
-                    <label for="exampleInputPassword1">///////////</label>
+                    <label for="exampleInputPassword1">{{ $travel->grantrequested }}</label>
         					 
                   </div>
                   
@@ -93,6 +93,10 @@
                      <label for="exampleInputPassword1">Reason for Rejection</label>
                        {!! Form::textarea('travel_event_rejection', '', ['class'=>'form-control','rows'=>3,'cols'=>8]) !!} 
                      
+                  </div>
+				  
+				  <div class="form-group">
+                     <a class="btn btn-default" for="exampleInputPassword1" type="submit" action="">Submit</a>                     
                   </div>
                   
 

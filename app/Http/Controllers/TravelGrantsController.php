@@ -69,8 +69,8 @@ class TravelGrantsController extends Controller
     public function viewAll()
     {
 		
-		$id = Auth::user()->user()->id; // user id of logged in user, this only works when a user is logged in.
-		$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->where('travelgrants.memid', '=', $id)->get();
+	$id = Auth::user()->user()->id; // user id of logged in user, this only works when a user is logged in.
+	$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->where('travelgrants.memid', '=', $id)->get();
         return view('frontend.dashboard.travelGrantListingAll',compact('travel'));
     }
 
