@@ -12,6 +12,7 @@ use App\Travelgrant;
 use Input;
 use App\Traveldocs;
 use App\Travelversion;
+use App\Http\Requests\TravelGrantsRequest;
 
 class TravelGrantsController extends Controller
 {
@@ -43,7 +44,7 @@ class TravelGrantsController extends Controller
     public function viewgrant()
     {
 		$id = Auth::user()->user()->id; // user id of logged in user
-		$travel = DB::table('travelgrants')->where('travelgrants.memid', '=', $id)->get();
+		$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->where('travelgrants.memid', '=', $id)->get();
 
         return view('frontend.dashboard.travelGrantMyGrant',compact('travel'));
     }
@@ -54,43 +55,52 @@ class TravelGrantsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storedoc($filename)
+    public function storedoc($filename,$travelrequest)
     {
-        $user = Auth::user()->user();
-        $grant = DB::table('travelgrants')->where('travelgrants.memid',$user->id )->first();
-        $doc= new Traveldocs;
-        $doc->grantid = $grant->id;
-        $doc->document = 'uploads/travel_grant_proposals/'.$filename;
-        $doc->save();
+        
+        $doc= Traveldocs::create([
+            'grantid'=>$travelrequest->id,
+            'document'=>'uploads/travel_grant_proposals/'.$filename,
+            ]);
 
-        $ver = new travelversion;
-        $ver->grantid = $grant->id;
-        $ver->status = 'pending';
-        $ver->save();
+        $ver = travelversion::create([
+            'grantid'=> $travelrequest->id,
+            'status'=>'pending',
+            'comments'=>null,
+            ]);
     }
-    public function store(Request $request)
+    public function store(TravelGrantsRequest $request)
     {
-        $user = Auth::user()->user();
-        $travelrequest = new Travelgrant;
-        $travelrequest->memid = $user->id;
-        $travelrequest->eventname = $request->input('travel_event_name');
-        $travelrequest->date = $request->input('travel_event_date');
-        $travelrequest->venue = $request->input('travel_event_venue');
-        $role=($request->input('travel_event_member_role'));
+        
+        $memid = Auth::user()->user()->id;
+        $eventname = Input::get('travel_event_name');
+        $date = Input::get('travel_event_date');
+        $venue = Input::get('travel_event_venue');
+        $role=Input::get('travel_event_member_role');
         $travelrole = DB::table('travelroles')->where('travelroles.role', 'like',$role)->first();
-        $travelrequest->roleid = $travelrole->id;
-        $travelrequest->justification = $request->input('travel_event_request_justification');
-        $travelrequest->mode = $request->input('travel_event_mode');
-        $travelrequest->grantrequested = $request->input('travel_event_grant_requested');
-        $travelrequest->amountgranted= '00';
-        $travelrequest->save();
+        $roleid = $travelrole->id;
+        $justification = Input::get('travel_event_request_justification');
+        $mode = Input::get('travel_event_mode');
+        $grantrequested = Input::get('travel_event_grant_requested');
+        $amountgranted= null;
+        
+        $travelrequest = Travelgrant::create([
+                    'memid' => $memid, 
+                    'eventname' => $eventname, 
+                    'date' => $date, 
+                    'venue' => $venue, 
+                    'roleid' => $roleid, 
+                    'justification' => $justification, 
+                    'mode' => $mode, 
+                    'grantrequested' => $grantrequested,
+                    ]);
+        
 
-
-        $filename = $user['id'].'.';
+        $filename = $memid.'.';
         $filename.= Input::file('travel_event_member_document')->getClientOriginalExtension();
         Input::file('travel_event_member_document')->move(storage_path('uploads/travel_grant_proposals'), $filename);
 
-       $this->storedoc($filename); 
+       $this->storedoc($filename,$travelrequest); 
        return redirect('/travelgrantmygrant');       
     }
 
@@ -121,12 +131,11 @@ class TravelGrantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function editgrant($id)
     {
-		$user_id = Auth::user()->user()->id; // user id of logged in user
-		$travel = DB::table('travelgrants')->join('travelroles', 'travelroles.id', '=', 'travelgrants.roleid')->where('travelgrants.memid', '=', $user_id)->where('travelgrants.id','=', $id )->first();
-
-		return view('frontend.dashboard.travelgrant_edit', compact('travel'));
+		$user = Auth::user()->user()->id; // user id of logged in user
+		$travel = DB::table('travelgrants')->where('id','=',$id)->get();
+		return view('frontend.dashboard.travelgrant_edit',['travels'=>$travel]);
         //
     }
 	
@@ -139,9 +148,9 @@ class TravelGrantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updategrant(Request $request, $id)
     {
-        //
+    //
     }
 
     /**

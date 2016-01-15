@@ -74,9 +74,10 @@
 									 
 									 @if($travels->status == "pending")
 									<div class="col-md-2">
-										<h5><a href="{{ route('editgrant', $travels->id) }}" >edit/</a><a href="{{ route('deletegrant', $travels->id) }}">delete</a></h5>
+										<h5><a href="{{ route('editgrant', $travels->grantid) }}" >edit/</a><a href="{{ route('deletegrant', $travels->id) }}">delete</a></h5>
 									</div>
 									 @elseif($travels->status == "approved")
+									 Approved
 									<div class="col-md-2">
 										
 									</div>

@@ -37,14 +37,12 @@
                   <div class="form-group">
                      <label for="exampleInputPassword1">Member Role</label>
                      <select class="form-control" id="travel_event_member_role" data-form="0" name="travel_event_member_role">
-                     <option value="invalid">Please select a member role</option>
-                     <option value="stu">Student</option>
-                     <option value="inst">Institution</option>
-                     <option value="pro">Professional</option>                    
+                     <option value="">Please select a member role</option>
+                     <option value="presenter">presenter</option>
+                     <option value="researcher">researcher</option>
+                     <option value="attendee">attendee</option>                    
                      </select>
-
-                     <input type="text" class="form-control"  name="travel_event_member_role">
-                     
+                                  
                   </div>
                   <div class="form-group">
                      <label for="exampleInputPassword1">Request Justification</label>
@@ -64,7 +62,7 @@
                   <div class="form-group">
                      <label for="exampleInputPassword1">Documents to be Attached</label>
                      <input type="file" name="travel_event_member_document" id="travel_event_member_documents">
-                     <p class="help-block">Please upload your documents.(file types allowed are doc/pdf</p>
+                     <p class="help-block">Please upload your documents.(file types allowed are doc/pdf)</p>
                      
                   </div>
 					    <div>

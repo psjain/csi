@@ -25,7 +25,7 @@ class CreateTravelGrantsTable extends Migration
             $table->string('justification',2000);
             $table->string('mode',80);
             $table->integer('grantrequested')->unsigned();
-            $table->integer('amountgranted')->unsigned();
+            $table->integer('amountgranted')->unsigned()->nullable();
              $table->timestamps();
 
           

@@ -126,7 +126,8 @@ Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'U
 Route::get('/travelgrant', ['middleware'=>'auth', 'as' => 'createtravel', 'uses'=>'TravelGrantsController@create']);
 Route::get('/travelgrantviewall', ['middleware'=>'auth', 'as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
 Route::get('/travelgrantmygrant', ['middleware'=>'auth', 'as' => 'viewallgrant', 'uses'=>'TravelGrantsController@viewgrant']);
-Route::get('/travelgrant/edit/{id}', ['middleware'=>'auth', 'as' => 'editgrant', 'uses'=>'TravelGrantsController@edit']);
+Route::get('/travelgrant/editgrant/{id}', ['middleware'=>'auth', 'as' => 'editgrant', 'uses'=>'TravelGrantsController@editgrant']);
+
 Route::get('/travelgrant/delete/{id}', [ 'middleware'=>'auth','as' => 'deletegrant', 'uses'=>'TravelGrantsController@destroy']);
 Route::post('/travelgrant', ['middleware'=>'auth', 'as' => 'storetravel', 'uses'=>'TravelGrantsController@store']);
 
