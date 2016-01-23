@@ -17,13 +17,10 @@ class CreateTravelVersionsTable extends Migration
 
 
             $table->bigInteger('grantid')->unsigned();
-            $table->Integer('id')->unsigned();
-            $table->string('status');  //required???
-            $table->string('comments',2000);
+            $table->increments('id')->unsigned();
+            $table->string('status');  
+            $table->string('comments',2000)->nullable();
             $table->timestamps();
-
-
-            $table->primary(array('grantid', 'id'));
           
             $table->foreign('grantid')
                     ->references('id')->on('travelgrants')

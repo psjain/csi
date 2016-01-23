@@ -58,7 +58,7 @@
 				<?php 
 							foreach($travel as $travels)
 							{
-								if($travels->amountgranted!=0)
+								if($travels->status=='approved')
 								{
 									echo '<div class="row">
 										<div class="col-md-3">
