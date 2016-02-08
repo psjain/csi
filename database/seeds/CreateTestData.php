@@ -347,6 +347,15 @@ class CreateTestData extends Seeder
 	            ]);
     			$this->command->info('request done!');
     		});
+
+			$this->call('TravelRolesSeeder');
+        	$this->command->info('Travelrole table seeded!');
+
+        	$this->call('TravelGrantSeeder');
+        	$this->command->info('Travelgrant table seeded!');
+
+        	$this->call('TravelVersionsSeeder');
+        	$this->command->info('Travelversion table seeded!');
         
     }
 }

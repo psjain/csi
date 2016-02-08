@@ -36,20 +36,9 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Travel Grants <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a href={{ route('adminTravelGrantView') }}>View All Requests</a>
+                    <a href={{ route('adminTravelGrantView') }}>View Requests</a>
                 </li>
-                 <li>
-                    <a href={{ route('adminTravelGrantApproved') }}>View Appproved Requests</a>
-                </li>
-                 <li>
-                    <a href={{ route('adminTravelGrantRejected') }}>View Rejected Requests</a>
-                </li>
-                <li>
-                     <a href={{ route('adminTravelGrantViewForm') }}>View Form</a>
-
-                </li>
-
-            </ul>
+           </ul>
             <!-- /.nav-second-level -->
         </li>
 

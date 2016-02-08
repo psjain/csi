@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Travelgrant extends Model
 {
-        use SoftDeletes;
-
-    
-        protected $dates = ['deleted_at'];
-
         protected $fillable = [ 'memid','eventname','date','venue','roleid','justification','mode','grantrequested','amountgranted'];
 
         public function getMember()	{
@@ -23,7 +18,13 @@ class Travelgrant extends Model
         public function getDocuments()	{
     		return $this->hasMany('App\TravelDocument', 'id', 'grantid');
     	}
-   
+        public function individual() {
+            return $this->hasOne('App\Individual', 'member_id', 'memid');
+        }
+        public function versions() {
+            return $this->hasMany('App\TravelVersion', 'grantid', 'id');
+        }
+        
 }
 
   

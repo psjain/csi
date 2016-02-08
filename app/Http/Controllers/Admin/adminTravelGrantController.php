@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
+use Input;
 use DB;
-
+use App\Travelgrant;
+use App\TravelVersion;
+use App\Member;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -18,12 +20,57 @@ class adminTravelGrantController extends Controller
      */
     public function index()
     {
-	//	$id = Auth::user()->user()->id; // user id of logged in user, this only works when a user is logged in.
-	//	$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->where('travelgrants.memid', '=', $id)->get();
-	
-		$travel = DB::table('travelgrants')->join('travelversions', 'travelversions.grantid', '=', 'travelgrants.id')->join('individuals', 'individuals.member_id', '=', 'travelgrants.memid')->where('travelversions.status', '=', 'pending')->get();
+        $rows = (Input::exists('row'))? (Input::get('row') < 5)?5:Input::get('row'): 15;          // how many rows for pagination
 
-        return view('backend.travelgrants.adminTravelGrant',compact('travel'));
+        $cat_select_options = [
+            0=>'all request',
+            1=>'pending',
+            2=>'approved',
+            3=>'rejected'
+        ];
+
+        // filters
+        $cat_selected = (Input::exists('cat'))? Input::get('cat'): 0;       // category
+        $page = (Input::exists('page'))? abs(Input::get('page')): 1;        // current page
+
+        $pending_requests = [];
+        $approved_requests = [];
+        $rejected_requests = [];
+
+        $travel=Travelgrant::paginate($rows);
+
+        foreach ($travel as $travels) {
+            $travelstatus=TravelVersion::getLatestVersionsByGrantID($travels->id)->getLatestVersionStatus();
+            $travels->status=$travelstatus;
+        }
+
+        foreach ($travel as $key => $travels) {
+
+            if($travels->status=="pending"){
+                array_push($pending_requests, $key);
+            } 
+            elseif($travels->status=="approved"){
+                array_push($approved_requests, $key);
+            }
+            elseif($travels->status=="rejected"){
+                array_push($rejected_requests, $key);
+            }
+        }
+
+        if($cat_selected==1){
+            $travel->forget($approved_requests);
+            $travel->forget($rejected_requests);
+        }
+        if($cat_selected==2){
+            $travel->forget($pending_requests);
+            $travel->forget($rejected_requests);
+        }
+        if($cat_selected==3){
+            $travel->forget($approved_requests);
+            $travel->forget($pending_requests);
+        }
+
+       return view('backend.travelgrants.adminTravelGrant',compact('travel','page','rows','cat_selected', 'cat_select_options', 'search_text'));
     }
 
     public function approve()
@@ -40,8 +87,6 @@ class adminTravelGrantController extends Controller
     }
       public function view($id)
     {
-		
-	//	$user_id = Auth::user()->user()->id; // user id of logged in user
 		$travel = DB::table('travelgrants')->join('travelroles', 'travelroles.id', '=', 'travelgrants.roleid')->where('travelgrants.id','=', $id )->first();
         return view('backend.travelgrants.adminTravelGrantViewForm',compact('travel'));
     }
@@ -111,5 +156,12 @@ class adminTravelGrantController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function profile($id)
+    {
+		$travel=Travelgrant::where('memid',$id)->first();
+        $user = Member::find($id);
+
+        return view('backend.travelgrants.adminTravelGrantMemberProfile',compact('travel', 'user'));
     }
 }
