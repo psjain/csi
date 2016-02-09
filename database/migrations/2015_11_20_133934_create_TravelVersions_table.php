@@ -20,6 +20,7 @@ class CreateTravelVersionsTable extends Migration
             $table->increments('id')->unsigned();
             $table->string('status');  
             $table->string('comments',2000)->nullable();
+            $table->tinyInteger('is_deleted')->default(0);
             $table->timestamps();
           
             $table->foreign('grantid')

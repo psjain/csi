@@ -79,7 +79,11 @@
 									 @elseif($travels->status == "approved")
 									 Approved
 									<div class="col-md-2">
-										
+										<h5>Approved</h5>
+									</div>
+									@elseif($travels->status == "rejected")
+									<div class="col-md-2">
+										<h5>Rejected</h5>
 									</div>
 									@endif
 								</div>

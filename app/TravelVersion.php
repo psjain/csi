@@ -7,14 +7,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Travelversion extends Model
 {	
-	use SoftDeletes;
-
-    
-    protected $dates = ['deleted_at'];
     protected $fillable = ['grantid','status','comments'];
 
-      public function getGrant()	{
-    		return $this->hasOne('App\TravelGrant', 'grantid', 'grantid');
-        }
+	public function getGrant()	{
+		return $this->hasOne('App\TravelGrant', 'grantid', 'grantid');
+	}
+	public function scopeGetLatestVersion($query)	{
+		return $query->orderBy('id', 'desc')->first();
+	}
 
+	public function scopeGetLatestVersionStatus($query)	{
+		return $query->orderBy('id', 'desc')->first()->status;
+	}
+
+	public function scopeGetLatestVersionsByGrantID($query, $id)	{
+		return $query->where('grantid',$id);
+	}
+	
 }
