@@ -15,8 +15,8 @@ class TravelRolesSeeder extends Seeder
         //
          DB::table('travelroles')->delete();
 
-         TravelRole::create(['role'=>'student']);
-         TravelRole::create(['role'=>'teacher']);
-         TravelRole::create(['role'=>'professor']);
+         TravelRole::create(['role'=>'presenter']);
+         TravelRole::create(['role'=>'researcher']);
+         TravelRole::create(['role'=>'attendee']);
     }
 }
