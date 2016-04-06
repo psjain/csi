@@ -44,7 +44,8 @@
 				<div class="card">
 					<div class="row">
 						<div class="col-md-8">
-							<h6>{{ $travels->individual->getName()}}</h6>
+							<h6>@if($travels->individual) 
+							@else "no name exist" @endif</h6>
 							<p>
 								<span>
 									{{$travels->eventname}}	: {{$travels->venue}}
