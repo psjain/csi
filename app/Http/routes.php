@@ -17,6 +17,9 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	Route::get('/sample', ['as' => 'sample', 'uses' => function () {
 		return View('backend.sample-list');
 
+
+
+
 	}]);
     Route::get('/', ['as' => 'admin', 'uses' => 'Auth\AdminAuthController@index']);
     
@@ -29,7 +32,18 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	Route::group(['prefix' => 'payments', 'middleware'=>'auth.admin'], function(){
 		Route::get('/{id}', ['as' => 'adminMemberPaymentDetails', 'uses' => 'PaymentController@index']);
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
+		
+
+
 	});
+
+	//admin travel grants
+	
+	Route::get('/admintravelgrant', [ 'as' => 'adminTravelGrantView', 'uses'=>'adminTravelGrantController@index' ]);
+	Route::get('/admintravelgrantapproved', [ 'as' => 'adminTravelGrantApproved', 'uses'=>'adminTravelGrantController@approve' ]);
+	Route::get('/admintravelgrantrejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
+	Route::get('/admintravelgrantviewform/{id}', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
+	Route::get('/admintravelgrantmemberprofile/{id}',['as'=>'adminTravelGrantMemberProfile','uses'=>'adminTravelGrantController@profile']);
 
 	Route::group(['prefix' => 'memberships', 'middleware'=>'auth.admin'], function(){
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
@@ -107,6 +121,14 @@ Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as'
 Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
 Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
 
+//travelgrants
+Route::get('/travelgrant', ['middleware'=>'auth', 'as' => 'createtravel', 'uses'=>'TravelGrantsController@create']);
+Route::get('/travelgrantviewall', ['middleware'=>'auth', 'as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
+Route::get('/travelgrantmygrant', ['middleware'=>'auth', 'as' => 'viewallgrant', 'uses'=>'TravelGrantsController@viewgrant']);
+Route::get('/travelgrant/editgrant/{id}', ['middleware'=>'auth', 'as' => 'editgrant', 'uses'=>'TravelGrantsController@editgrant']);
+
+Route::get('/travelgrant/delete/{id}', [ 'middleware'=>'auth','as' => 'deletegrant', 'uses'=>'TravelGrantsController@destroy']);
+Route::post('/travelgrant', ['middleware'=>'auth', 'as' => 'storetravel', 'uses'=>'TravelGrantsController@store']);
 
 
 // Registration routes...
