@@ -3,13 +3,21 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Travelgrant;
-class Travelrole extends Model
+
+
+class TravelRole extends Model
 {
-     protected $fillable = ['role']; 
 
+	public function travelgrant()
+    {
+        return $this->hasMany('App\TravelGrant');
+    }
     
 
-     
     
+    protected $fillable = ['role'];
+
+   
+
+   
 }

@@ -112,6 +112,8 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <!-- <script src="js/verify.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
     <script src={{ asset("js/jquery-ui.js") }}></script>
     <script src={{ asset("js/bootstrap.min.js") }}></script>
     <script src={{ asset("js/admin.js") }}></script>

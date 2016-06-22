@@ -82,9 +82,6 @@
                                 <li>
                                     <a href={{ route('viewalltravel') }}>View All</a>
                                 </li>
-                                <li>
-                                    <a href={{ route('viewallgrant') }}>My Grants</a>
-                                </li>
                                 
                             </ul>
                         </li>

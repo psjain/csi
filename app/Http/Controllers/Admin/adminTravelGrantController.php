@@ -5,11 +5,20 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Input;
 use DB;
-use App\Travelgrant;
+use App\TravelGrant;
 use App\TravelVersion;
+use App\TravelDoc;
+use App\TravelRequestStatus;
+use App\TravelRole;
 use App\Member;
+use App\Institution;
+use App\Individual;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Response;
+use Redirect;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\pagination;
 
 class adminTravelGrantController extends Controller
 {
@@ -20,74 +29,195 @@ class adminTravelGrantController extends Controller
      */
     public function index()
     {
-        $rows = (Input::exists('row'))? (Input::get('row') < 5)?5:Input::get('row'): 15;          // how many rows for pagination
+       
+        
+       
+      
+        $statuses= TravelRequestStatus::all();
+        $rows = (Input::exists('rows'))?abs(Input::get('rows')): 15;         // how many rows for pagination        
+        $page = (Input::exists('page'))? abs(Input::get('page')): 1;        // current page 
+        $search=(Input::exists('search'))?abs(Input::get('search')):'' ;
+        $search_text=(Input::exists('search_text'))?(Input::get('search_text')):'';
+        $status=Input::get('status'); 
+        $fromDate=(Input::exists('request_from_date'))?(Input::get('request_from_date')):'';
+        $toDate=(Input::exists('request_to_date'))?(Input::get('request_to_date')):'';
+        if(count($status)){
+          $checkbox_array=Input::get('status');
+        }else{
+          $checkbox_array=array();
+        } 
+        
+        //there is some search text){
+      if($search)
+      {
+        switch($search)
+        {
+          case 1: $travel= TravelGrant::where('id',$search_text)->latest()->paginate($rows);
+                  break;
+          case 2: if(count($status))
+                  {
+                    $travel = TravelVersion::select('travel_grant_id')->whereIn('travel_request_status_id',$status)->get();
+                    $travel= TravelGrant::where('member_id',$search_text)->whereIn('id',$travel)->latest()->paginate($rows);
+                  }
+                  else
+                  {
+                    $travel=TravelGrant::where('member_id',$search_text)->latest()->paginate($rows);
 
-        $cat_select_options = [
-            0=>'all request',
-            1=>'pending',
-            2=>'approved',
-            3=>'rejected'
-        ];
+                  }
+                  break;
+          case 3: if(count($status))
+                  {
+                    $member_id=Individual::select('member_id')->where('first_name','like','%'.$search_text.'%')->get();
+                    $travel = TravelVersion::select('travel_grant_id')->whereIn('travel_request_status_id',$status)->get();
+                    $travel= TravelGrant::whereIn('member_id',$member_id)->whereIn('id',$travel)->latest()->paginate($rows);
+                  }
+                  else
+                  {
+                    $member_id=Individual::select('member_id')->where('first_name','like','%'.$search_text.'%')->get();
+                    $travel=TravelGrant::whereIn('member_id',$member_id)->latest()->paginate($rows);
 
-        // filters
-        $cat_selected = (Input::exists('cat'))? Input::get('cat'): 0;       // category
-        $page = (Input::exists('page'))? abs(Input::get('page')): 1;        // current page
+                  }
+                  break;
+          case 4: if(count($status))
+                  {
+                    $member_id=Institution::select('member_id')->where('name','like','%'.$search_text.'%')->get();
+                    $travel = TravelVersion::select('travel_grant_id')->whereIn('travel_request_status_id',$status)->get();
+                    $travel= TravelGrant::whereIn('member_id',$member_id)->whereIn('id',$travel)->latest()->paginate($rows);
+                  }
+                  else
+                  {
+                    $member_id=Institution::select('member_id')->where('name','like','%'.$search_text.'%')->get();
+                    $travel=TravelGrant::whereIn('member_id',$member_id)->latest()->paginate($rows);
 
-        $pending_requests = [];
-        $approved_requests = [];
-        $rejected_requests = [];
+                  }
+                  break;
+          case 5: if(count($status))
+                  {
+                    $member_id=Member::select('id')->where('email','like','%'.$search_text.'%')->get();
+                    $travel = TravelVersion::select('travel_grant_id')->whereIn('travel_request_status_id',$status)->get();
+                    $travel= TravelGrant::whereIn('member_id',$member_id)->whereIn('id',$travel)->latest()->paginate($rows);
+                  }
+                  else
+                  {
+                    $member_id=Member::select('id')->where('email','like','%'.$search_text.'%')->get();
+                    $travel=TravelGrant::whereIn('member_id',$member_id)->latest()->paginate($rows);
 
-        $travel=Travelgrant::paginate($rows);
-
-        foreach ($travel as $travels) {
-            $travelstatus=TravelVersion::getLatestVersionsByGrantID($travels->id)->getLatestVersionStatus();
-            $travels->status=$travelstatus;
+                  }
+                  break;
+        }       
+         
+      }
+      else
+      {
+        if(count($status))
+        {
+          $travel = TravelVersion::select('travel_grant_id')->whereIn('travel_request_status_id',$status)->get();
+          $travel=TravelGrant::whereIn('id',$travel)->latest()->paginate($rows);
         }
+        else
+        {
+          $travel=TravelVersion::select('travel_grant_id')->distinct('travel_grant_id')->get();
+          $travel=TravelGrant::whereIn('id',$travel)->latest()->paginate($rows);
 
+        }
+          
+      }
+
+
+        
+        //here you get status wise tuples, do query for dates
+        $from_date_records = array();
+        $to_date_records = array();
         foreach ($travel as $key => $travels) {
-
-            if($travels->status=="pending"){
-                array_push($pending_requests, $key);
-            } 
-            elseif($travels->status=="approved"){
-                array_push($approved_requests, $key);
+            if($fromDate){
+              if($travels->created_at <= $fromDate ){ //lower bound
+                array_push($from_date_records, $key);
+              }
             }
-            elseif($travels->status=="rejected"){
-                array_push($rejected_requests, $key);
-            }
-        }
+            if($toDate){
+              if($travels->created_at >= $toDate ){ //upper bound
+                array_push($to_date_records, $key);
+              }
+            }       
+        
 
-        if($cat_selected==1){
-            $travel->forget($approved_requests);
-            $travel->forget($rejected_requests);
-        }
-        if($cat_selected==2){
-            $travel->forget($pending_requests);
-            $travel->forget($rejected_requests);
-        }
-        if($cat_selected==3){
-            $travel->forget($approved_requests);
-            $travel->forget($pending_requests);
-        }
+        if(!empty($fromDate)){
+          //we need intersection of both the filters 
+          $travel->forget($from_date_records);
+        } 
 
-       return view('backend.travelgrants.adminTravelGrant',compact('travel','page','rows','cat_selected', 'cat_select_options', 'search_text'));
+        if(!empty($toDate))
+          $travel->forget($to_date_records);
+        }       
+
+        // }
+                
+            
+                  
+        return view('backend.travelgrants.adminTravelGrant',compact('travel','page','rows', 'search_text','statuses','checkbox_array','search','fromDate','toDate'));
+    
     }
+    
+    
 
-    public function approve()
+
+ public function approve(Request $request)
+    {    
+        $amountreq= TravelGrant::where('id',$request->travel_grant_id)->value('requested_amount');
+                   
+        if($request->granted_amount<=$amountreq)
+        {
+
+            TravelVersion::where('travel_grant_id','=', $request->travel_grant_id )->UpdateStatus(2);
+            TravelVersion::where('travel_grant_id','=', $request->travel_grant_id )->update(['comments'=>$request->feedback]);
+             TravelGrant::find( $request->travel_grant_id)->update(['granted_amount'=>$request->granted_amount]);
+
+        }                
+                $user = Member::find($request->member_id);  
+                $travel= TravelGrant::find($request->travel_grant_id);            
+                
+                return Redirect::route('adminTravelGrantMemberProfile',[$request->member_id,$request->travel_grant_id])->with('travel', $travel)->with('user', $user); 
+      }
+
+   public function reject(Request $request)
     {
-         return view('backend.travelgrants.adminTravelGrantApproved');
+                TravelVersion::where('travel_grant_id','=', $request->travel_grant_id)->update(['comments'=>$request->feedback]);
+                TravelVersion::where('travel_grant_id','=', $request->travel_grant_id )->where('travel_request_status_id','=', 1)->update(['travel_request_status_id'=>3]);          
+              
+                $user = Member::find($request->member_id);  
+                $travel= TravelGrant::find($request->travel_grant_id);            
+                
+                return Redirect::route('adminTravelGrantMemberProfile',[$request->member_id,$request->travel_grant_id])->with('travel', $travel)->with('user', $user); 
    
 
     }
-    public function reject()
-    {
-         return view('backend.travelgrants.adminTravelGrantRejected');
-   
-
+    public function revise(Request $request)
+    {                
+                TravelVersion::where('travel_grant_id','=', $request->travel_grant_id)->update(['comments'=>$request->feedback]);
+                TravelVersion::where('travel_grant_id','=', $request->travel_grant_id )->where('travel_request_status_id','=', 1)->update(['travel_request_status_id'=>4]);      
+                $user = Member::find($request->member_id);  
+                $travel= TravelGrant::find($request->travel_grant_id);            
+                
+                return Redirect::route('adminTravelGrantMemberProfile',[$request->member_id,$request->travel_grant_id])->with('travel', $travel)->with('user', $user);   
     }
-      public function view($id)
+    public function showDocument($file)
+    {
+        $location='uploads\travel_grant_proposals\_'.$file;        
+         $path = storage_path($location);
+        $response= Response::make(file_get_contents($path), 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'inline; filename="'.$file,
+        ]);
+        return $response; 
+    }
+
+
+
+    
+    public function view($id)
     {
 		$travel = DB::table('travelgrants')->join('travelroles', 'travelroles.id', '=', 'travelgrants.roleid')->where('travelgrants.id','=', $id )->first();
+
         return view('backend.travelgrants.adminTravelGrantViewForm',compact('travel'));
     }
 
@@ -157,11 +287,28 @@ class adminTravelGrantController extends Controller
     {
         //
     }
-    public function profile($id)
-    {
-		$travel=Travelgrant::where('memid',$id)->first();
-        $user = Member::find($id);
-
-        return view('backend.travelgrants.adminTravelGrantMemberProfile',compact('travel', 'user'));
+    public function profile($travel_grant_id)
+    { 
+        $member_id=TravelGrant::find($travel_grant_id)->value('member_id');
+		    $previous=TravelGrant::where('member_id',$member_id)->where('id','<>',$travel_grant_id)->get();
+        $grant_history=TravelVersion::withTrashed()->where('travel_grant_id','=',$travel_grant_id)->get();
+        //return $grant_history;        
+        $travel= TravelGrant::find($travel_grant_id);      
+        $user = Member::find($member_id);        
+        return view('backend.travelgrants.adminTravelGrantMemberProfile',compact('travel','user','previous','grant_history'));       
     }
+    public function g1()
+    {
+        return view('backend.travelgrants.g1');
+    }
+    
+   
+
+
+
+
+
+
+
+
 }

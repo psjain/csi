@@ -83,4 +83,25 @@ class Member extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Request', 'requested_by', 'id');
     }
 
+    public function individual() {
+        return $this->belongsTo('App\Individual', 'id', 'member_id');
+    }
+
+    public function institution() {
+        return $this->belongsTo('App\Institution', 'id', 'member_id');
+    }
+
+
+    public function travelgrants()
+    {
+        return $this->hasMany('App\TravelGrant');
+    }
+
+    public function travelversions()
+    {
+        return $this->hasManyThrough('App\TravelVersion', 'App\TravelGrant');
+    }
+
+    
+
 }

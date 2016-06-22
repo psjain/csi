@@ -71,6 +71,10 @@ class DatabaseSeeder extends Seeder
         $this->command->info('NotificationType table seeded!');
 
         
+
+        
+
+        
         Model::reguard();
     }
 }

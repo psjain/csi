@@ -1,7 +1,7 @@
 @extends('backend.master')
 
 @section('page-header')
-  <h4>Member Profile</h4>
+  <h4>Travel Grant Profile</h4>
 @endsection
 
 @section('main')
@@ -14,7 +14,8 @@
 
         <!-- profile area right -->
         <div class="col-md-9">
-           @include('backend.partials._memberProfileView')
+           @include('backend.travelgrants._memberGrantProfile')
         </div>
+        
     </div>
 @endsection

@@ -13,7 +13,7 @@
             
     <!-- /.row -->
     <div class="row">
-       
+       @include('backend.travelgrants.dashboard_travel_grant_box')
     </div>
     <!-- /.row -->
 @endsection

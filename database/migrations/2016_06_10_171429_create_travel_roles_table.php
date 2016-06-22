@@ -12,16 +12,14 @@ class CreateTravelRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('travelroles', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('travel_roles', function (Blueprint $table) {
+             $table->engine = 'InnoDB';
 
 
             $table->increments('id')->unsigned();
             $table->string('role',500);
              $table->timestamps();
-           
-            
-       });    
+        });
     }
 
     /**
@@ -30,7 +28,7 @@ class CreateTravelRolesTable extends Migration
      * @return void
      */
     public function down()
-    {  
-        Schema::drop('roles');
+    {
+        Schema::drop('travel_roles');
     }
 }

@@ -16,10 +16,6 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 	// all the routes for front-end site
 	Route::get('/sample', ['as' => 'sample', 'uses' => function () {
 		return View('backend.sample-list');
-
-
-
-
 	}]);
     Route::get('/', ['as' => 'admin', 'uses' => 'Auth\AdminAuthController@index']);
     
@@ -36,15 +32,19 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 
 
 	});
-
+//Route::get('g1','adminTravelGrantController@g1');
 	//admin travel grants
-	
-	Route::get('/admintravelgrant', [ 'as' => 'adminTravelGrantView', 'uses'=>'adminTravelGrantController@index' ]);
-	Route::get('/admintravelgrantapproved', [ 'as' => 'adminTravelGrantApproved', 'uses'=>'adminTravelGrantController@approve' ]);
-	Route::get('/admintravelgrantrejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
-	Route::get('/admintravelgrantviewform/{id}', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
-	Route::get('/admintravelgrantmemberprofile/{id}',['as'=>'adminTravelGrantMemberProfile','uses'=>'adminTravelGrantController@profile']);
-
+	Route::group(['prefix'=>'travel-grants','middleware'=>'auth.admin'],function(){	
+		Route::get('/view', [ 'as' => 'adminTravelGrantView', 'uses'=>'adminTravelGrantController@index' ]);
+		Route::get('/{value}', [ 'as' => 'adminTravelGrantViewSpecific', 'uses'=>'AdminDashboardController@travelGrantRequests' ]);
+		Route::post('/approved', [ 'as' => 'adminTravelGrantApproved', 'uses'=>'adminTravelGrantController@approve' ]);
+		Route::post('/{id}', [ 'as' => 'adminTravelGrantApproveSave', 'uses'=>'adminTravelGrantController@approvesave' ]);
+		Route::get('/{filename}',['as'=>'adminTravelGrantMemberDocument','uses'=>'adminTravelGrantController@showDocument']);
+		Route::post('/rejected', [ 'as' => 'adminTravelGrantRejected', 'uses'=>'adminTravelGrantController@reject' ]);
+	    Route::post('/revised', [ 'as' => 'adminTravelGrantRevised', 'uses'=>'adminTravelGrantController@revise' ]);
+		Route::get('/{id}', [ 'as' => 'adminTravelGrantViewForm', 'uses'=>'adminTravelGrantController@view' ]);
+		Route::get('/profile/{id}',['as'=>'adminTravelGrantMemberProfile','uses'=>'adminTravelGrantController@profile']);
+	});
 	Route::group(['prefix' => 'memberships', 'middleware'=>'auth.admin'], function(){
 		Route::get('/', [ 'as' => 'adminMembershipContent', 'uses'=>'MembershipController@index' ]);
 		// Route::get('{typeId}/verify/{id}', [ 'as' => 'backendInstitutionVerifyById', 'uses'=>'InstitutionController@verify' ]);
@@ -84,9 +84,7 @@ Route::group(['prefix'=> 'admin' ,'namespace'=>'Admin'], function(){
 
 });
 
-Route::get('register/{entity}', [
-		'as'=>'register', 'uses'=>'RegisterController@create'
-]);
+Route::get('register/{entity}', ['as'=>'register', 'uses'=>'RegisterController@create']);
 Route::post('register/getresource/{resource}', 'RegisterController@getResource');
 Route::post('register/{entity}', 'RegisterController@store');
 
@@ -114,23 +112,25 @@ Route::get('logout', 'Auth\AuthController@getLogout');
 
 // Authentication routes...
 Route::post('login', 'Auth\AuthController@postLogin');
-Route::get('/dashboard', ['middleware'=>'auth', 'uses'=>'UserDashboardController@index']);	
 
-Route::get('/profile', ['middleware'=>'auth', 'as' => 'profile', 'uses'=>'UserDashboardController@showProfile']);
-Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as' => 'confirmStudentBranch', 'uses'=>'UserDashboardController@confirmStudentBranch']);
-Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
-Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
+Route::group(['prefix'=>''],function(){
+	Route::get('/dashboard', ['middleware'=>'auth','uses'=>'UserDashboardController@index']);	
+	Route::get('/profile', ['middleware'=>'auth','as' => 'profile', 'uses'=>'UserDashboardController@showProfile']);
+	Route::get('/confirmStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'as' => 'confirmStudentBranch', 'uses'=>'UserDashboardController@confirmStudentBranch']);
+	Route::post('/makeStudentBranch', ['middleware'=> ['auth', 'isacademic'], 'uses'=>'UserDashboardController@makeStudentBranch']);
+	Route::get('/card', ['middleware'=>'auth.individual', 'as' => 'card', 'uses'=>'UserDashboardController@showCard']);
 
-//travelgrants
-Route::get('/travelgrant', ['middleware'=>'auth', 'as' => 'createtravel', 'uses'=>'TravelGrantsController@create']);
-Route::get('/travelgrantviewall', ['middleware'=>'auth', 'as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
-Route::get('/travelgrantmygrant', ['middleware'=>'auth', 'as' => 'viewallgrant', 'uses'=>'TravelGrantsController@viewgrant']);
-Route::get('/travelgrant/editgrant/{id}', ['middleware'=>'auth', 'as' => 'editgrant', 'uses'=>'TravelGrantsController@editgrant']);
-
-Route::get('/travelgrant/delete/{id}', [ 'middleware'=>'auth','as' => 'deletegrant', 'uses'=>'TravelGrantsController@destroy']);
-Route::post('/travelgrant', ['middleware'=>'auth', 'as' => 'storetravel', 'uses'=>'TravelGrantsController@store']);
-
-
+	//travelgrants
+	Route::group(['prefix'=>'travel-grants','middleware'=>'auth'],function(){
+		Route::get('/create', ['as' => 'createtravel', 'uses'=>'TravelGrantsController@create']);
+		Route::get('/view', ['as' => 'viewalltravel', 'uses'=>'TravelGrantsController@viewAll']);
+		Route::get('/edit/{id}', ['as' => 'editgrant', 'uses'=>'TravelGrantsController@editgrant']);
+		Route::get('/delete/{id}', ['as' => 'deletegrant', 'uses'=>'TravelGrantsController@deletegrant']);
+		Route::post('/save', ['as' => 'travelgrantsave', 'uses'=>'TravelGrantsController@store']);
+		Route::post('/update/{id}', ['as' => 'updatetravelgrant', 'uses'=>'TravelGrantsController@updategrant']);
+		Route::get('/getdocument/{filename}',['as'=>'TravelGrantMemberDocument','uses'=>'TravelGrantsController@showDocument']);
+	});
+});
 // Registration routes...
 // Route::group(['prefix' => 'admin'], function() {
 // 	// Authentication routes...
